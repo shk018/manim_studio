@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Manim Studio — code to animation</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="frame">
+
+    <header class="topbar">
+      <div class="mark">
+        <span class="mark-dot"></span>
+        <span class="mark-text">manim studio</span>
+      </div>
+      <div class="topbar-sub">python in, animation out</div>
+    </header>
+
+    <main class="layout">
+
+      <section class="panel editor-panel">
+        <label class="field-label" for="prompt">what is this animation for <span class="optional">(optional note)</span></label>
+        <input id="prompt" type="text" placeholder="e.g. explaining binary search for a tutorial" />
+
+        <div class="code-head">
+          <label class="field-label" for="code">manim scene code</label>
+          <div class="code-head-right">
+            <select id="quality">
+              <option value="low">draft · 480p · fast</option>
+              <option value="medium">standard · 720p</option>
+              <option value="high">final · 1080p · slow</option>
+            </select>
+          </div>
+        </div>
+
+        <textarea id="code" spellcheck="false" placeholder="from manim import *
+
+class MyScene(Scene):
+    def construct(self):
+        circle = Circle()
+        self.play(Create(circle))
+"></textarea>
+
+        <div class="controls-row">
+          <button id="renderBtn" class="btn-primary">Render video</button>
+          <span id="sceneHint" class="scene-hint"></span>
+        </div>
+
+        <div class="audio-section">
+          <label class="field-label">narration &amp; music</label>
+
+          <div class="narration-modes">
+            <label class="radio-pill">
+              <input type="radio" name="narrationMode" value="none" checked />
+              No narration
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="narrationMode" value="auto" />
+              Auto (from code comments)
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="narrationMode" value="custom" />
+              Write my own script
+            </label>
+          </div>
+
+          <textarea id="narrationScript" class="narration-script hidden"
+            placeholder="Type what you want narrated over the video..."></textarea>
+
+          <div class="audio-controls-row">
+            <label class="voice-label" for="voiceSelect">Voice</label>
+            <select id="voiceSelect" disabled>
+              <option value="">Loading voices…</option>
+            </select>
+
+            <label class="music-toggle">
+              <input type="checkbox" id="musicToggle" />
+              Add background music
+            </label>
+          </div>
+          <p class="audio-note">
+            Auto mode narrates each section it finds in your code's
+            <code># ---------- Heading ----------</code> comments. No comments found
+            → nothing gets narrated automatically; use "write my own script" instead.
+            Music is an original synthesized background track, not a licensed sample.
+          </p>
+        </div>
+
+        <pre id="log" class="log hidden"></pre>
+      </section>
+
+      <section class="panel preview-panel">
+        <label class="field-label">preview</label>
+        <div id="previewArea" class="preview-area">
+          <div class="preview-empty">
+            <span class="preview-empty-icon">▷</span>
+            <p>Your rendered video will appear here.</p>
+          </div>
+        </div>
+
+        <div class="history">
+          <label class="field-label">recent renders</label>
+          <ul id="historyList" class="history-list"></ul>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer-note">
+      Rendering uses <strong>Manim Community</strong> + ffmpeg on the server. Draft quality renders fastest — use it while iterating on code, then switch to final for export.
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
